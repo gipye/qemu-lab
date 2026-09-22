@@ -1,0 +1,27 @@
+#cloud-config
+
+hostname: example01
+manage_etc_hosts: true
+
+users:
+  - name: ubuntu
+    gecos: Ubuntu User
+    groups: [adm, sudo]
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    lock_passwd: true
+    ssh_authorized_keys:
+      - #FILL THIS FIELD
+
+ssh_pwauth: false
+
+package_update: true
+package_upgrade: false
+
+packages:
+  - qemu-guest-agent
+
+runcmd:
+  - systemctl enable --now qemu-guest-agent
+
+final_message: "cloud-init finished: $TIMESTAMP"
