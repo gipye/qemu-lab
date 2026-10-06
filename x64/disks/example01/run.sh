@@ -8,7 +8,8 @@ cloud-localds "$DIR/seed.iso" "$DIR/user-data.yml" "$DIR/meta-data.yml"
 # KVM 가속을 사용하는 x86-64 VM
 qemu-system-x86_64 \
     -accel kvm \
-    -machine q35 \
+    -machine q35,memory-backend=mem0 \
+    -object memory-backend-memfd,id=mem0,size=2G,share=on \
     -cpu host \
     -m 2G \
     -smp 2 \
@@ -16,5 +17,5 @@ qemu-system-x86_64 \
     -cdrom $DIR/seed.iso \
     -netdev user,id=net0,hostfwd=tcp::2222-:22 \
     -device virtio-net-pci,netdev=net0 \
-    -device '{"driver":"vfio-user-pci","socket":{"path":"/tmp/example01.sock","type":"unix"}}' \
+    -device '{"driver":"vfio-user-pci","socket":{"path":"/tmp/vfio-user.sock","type":"unix"}}' \
     -nographic
